@@ -22,7 +22,7 @@ SUB_CHUNK_CONVERTER_METHOD(convertSubChunkXZY) {
 	zend_string *idArray;
 	zend_string *metaArray;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 2, 2)
+	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(idArray)
 		Z_PARAM_STR(metaArray)
 	ZEND_PARSE_PARAMETERS_END();
@@ -47,7 +47,7 @@ SUB_CHUNK_CONVERTER_METHOD(convertSubChunkYZX) {
 	zend_string *idArray;
 	zend_string *metaArray;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 2, 2)
+	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(idArray)
 		Z_PARAM_STR(metaArray)
 	ZEND_PARSE_PARAMETERS_END();
@@ -72,7 +72,7 @@ SUB_CHUNK_CONVERTER_METHOD(convertSubChunkFromLegacyColumn) {
 	zend_string *metaArray;
 	zend_long yOffset;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
+	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR(idArray)
 		Z_PARAM_STR(metaArray)
 		Z_PARAM_LONG(yOffset)

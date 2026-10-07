@@ -7,7 +7,7 @@ extern "C" {
 
 template<typename class_name>
 static inline class_name * fetch_from_zend_object(zend_object *obj) {
-	return (class_name *)((char *)obj - XtOffsetOf(class_name, std));
+	return (class_name *)((char *)obj - offsetof(class_name, std));
 }
 
 template<typename class_name>

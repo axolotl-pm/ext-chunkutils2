@@ -160,15 +160,15 @@ static int paletted_block_array_serialize(zval *obj, unsigned char **buffer, siz
 
 	paletted_block_array_get_bits_per_block(obj, &zv);
 	php_var_serialize(&buf, &zv, &serialize_data);
-	zval_dtor(&zv);
+	zval_ptr_dtor_nogc(&zv);
 
 	paletted_block_array_get_word_array(obj, &zv);
 	php_var_serialize(&buf, &zv, &serialize_data);
-	zval_dtor(&zv);
+	zval_ptr_dtor_nogc(&zv);
 
 	paletted_block_array_get_palette(obj, &zv);
 	php_var_serialize(&buf, &zv, &serialize_data);
-	zval_dtor(&zv);
+	zval_ptr_dtor_nogc(&zv);
 
 	ZVAL_ARR(&zv, zend_std_get_properties(Z_OBJ_P(obj)));
 	php_var_serialize(&buf, &zv, &serialize_data);
@@ -234,7 +234,7 @@ end:
 PALETTED_BLOCK_ARRAY_METHOD(__construct) {
 	zend_long fillEntry;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(fillEntry)
 	ZEND_PARSE_PARAMETERS_END();
 
@@ -256,7 +256,7 @@ PALETTED_BLOCK_ARRAY_METHOD(fromData) {
 	zend_string *wordArrayZstr;
 	zval *paletteZarray;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
+	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(bitsPerBlock)
 		Z_PARAM_STR(wordArrayZstr)
 		Z_PARAM_ARRAY(paletteZarray)
@@ -266,13 +266,13 @@ PALETTED_BLOCK_ARRAY_METHOD(fromData) {
 }
 
 PALETTED_BLOCK_ARRAY_METHOD(getWordArray) {
-	zend_parse_parameters_none_throw();
+	zend_parse_parameters_none();
 
 	paletted_block_array_get_word_array(getThis(), return_value);
 }
 
 PALETTED_BLOCK_ARRAY_METHOD(getPalette) {
-	zend_parse_parameters_none_throw();
+	zend_parse_parameters_none();
 
 	paletted_block_array_get_palette(getThis(), return_value);
 }
@@ -280,7 +280,7 @@ PALETTED_BLOCK_ARRAY_METHOD(getPalette) {
 PALETTED_BLOCK_ARRAY_METHOD(setPalette) {
 	zval* paletteZarray;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(paletteZarray)
 	ZEND_PARSE_PARAMETERS_END();
 
@@ -288,14 +288,14 @@ PALETTED_BLOCK_ARRAY_METHOD(setPalette) {
 }
 
 PALETTED_BLOCK_ARRAY_METHOD(getMaxPaletteSize) {
-	zend_parse_parameters_none_throw();
+	zend_parse_parameters_none();
 
 	paletted_block_array_obj *intern = fetch_from_zend_object<paletted_block_array_obj>(Z_OBJ_P(getThis()));
 	RETURN_LONG(intern->container.getMaxPaletteSize());
 }
 
 PALETTED_BLOCK_ARRAY_METHOD(getBitsPerBlock) {
-	zend_parse_parameters_none_throw();
+	zend_parse_parameters_none();
 
 	paletted_block_array_get_bits_per_block(getThis(), return_value);
 }
@@ -303,7 +303,7 @@ PALETTED_BLOCK_ARRAY_METHOD(getBitsPerBlock) {
 PALETTED_BLOCK_ARRAY_METHOD(get) {
 	zend_long x, y, z;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
+	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(x)
 		Z_PARAM_LONG(y)
 		Z_PARAM_LONG(z)
@@ -316,7 +316,7 @@ PALETTED_BLOCK_ARRAY_METHOD(get) {
 PALETTED_BLOCK_ARRAY_METHOD(set) {
 	zend_long x, y, z, val;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 4, 4)
+	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_LONG(x)
 		Z_PARAM_LONG(y)
 		Z_PARAM_LONG(z)
@@ -330,7 +330,7 @@ PALETTED_BLOCK_ARRAY_METHOD(set) {
 PALETTED_BLOCK_ARRAY_METHOD(replaceAll) {
 	zend_long oldVal, newVal;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 2, 2)
+	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(oldVal)
 		Z_PARAM_LONG(newVal)
 	ZEND_PARSE_PARAMETERS_END();
@@ -342,7 +342,7 @@ PALETTED_BLOCK_ARRAY_METHOD(replaceAll) {
 PALETTED_BLOCK_ARRAY_METHOD(collectGarbage) {
 	zend_bool force = 0;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 0, 1)
+	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(force)
 	ZEND_PARSE_PARAMETERS_END();
@@ -354,7 +354,7 @@ PALETTED_BLOCK_ARRAY_METHOD(collectGarbage) {
 PALETTED_BLOCK_ARRAY_METHOD(getExpectedWordArraySize) {
 	zend_long bitsPerBlock;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(bitsPerBlock)
 	ZEND_PARSE_PARAMETERS_END();
 
@@ -382,7 +382,7 @@ void register_paletted_block_array_class() {
 	paletted_block_array_load_exception_entry = register_class_pocketmine_world_format_PalettedBlockArrayLoadException(spl_ce_RuntimeException);
 
 	memcpy(&paletted_block_array_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	paletted_block_array_handlers.offset = XtOffsetOf(paletted_block_array_obj, std);
+	paletted_block_array_handlers.offset = offsetof(paletted_block_array_obj, std);
 	paletted_block_array_handlers.free_obj = paletted_block_array_free;
 	paletted_block_array_handlers.clone_obj = paletted_block_array_clone;
 
