@@ -76,7 +76,7 @@ static int light_array_unserialize(zval* obj, zend_class_entry* ce, const unsign
 LIGHT_ARRAY_METHOD(__construct) {
 	zend_string* payload;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+	CHUNKUTILS2_PARSE_PARAMETER_START(1, 1)
 		Z_PARAM_STR(payload);
 	ZEND_PARSE_PARAMETERS_END();
 
@@ -95,7 +95,8 @@ LIGHT_ARRAY_METHOD(__construct) {
 LIGHT_ARRAY_METHOD(fill) {
 	zend_long level;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+
+	CHUNKUTILS2_PARSE_PARAMETER_START(1, 1)
 		Z_PARAM_LONG(level)
 	ZEND_PARSE_PARAMETERS_END();
 
@@ -112,7 +113,7 @@ LIGHT_ARRAY_METHOD(fill) {
 LIGHT_ARRAY_METHOD(get) {
 	zend_long x, y, z;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 3, 3)
+	CHUNKUTILS2_PARSE_PARAMETER_START(3, 3)
 		Z_PARAM_LONG(x)
 		Z_PARAM_LONG(y)
 		Z_PARAM_LONG(z)
@@ -125,7 +126,7 @@ LIGHT_ARRAY_METHOD(get) {
 LIGHT_ARRAY_METHOD(set) {
 	zend_long x, y, z, level;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 4, 4)
+	CHUNKUTILS2_PARSE_PARAMETER_START(4, 4)
 		Z_PARAM_LONG(x)
 		Z_PARAM_LONG(y)
 		Z_PARAM_LONG(z)
@@ -137,7 +138,7 @@ LIGHT_ARRAY_METHOD(set) {
 }
 
 LIGHT_ARRAY_METHOD(getData) {
-	zend_parse_parameters_none_throw();
+	chunkutils_parse_parameters_none();
 
 	auto object = fetch_from_zend_object<light_array_obj>(Z_OBJ_P(getThis()));
 
@@ -147,7 +148,7 @@ LIGHT_ARRAY_METHOD(getData) {
 }
 
 LIGHT_ARRAY_METHOD(collectGarbage) {
-	zend_parse_parameters_none_throw();
+	chunkutils_parse_parameters_none();
 
 	//TODO: we currently don't bother trying to save memory with copy-on-write tricks, to reduce implementation complexity.
 }
@@ -155,7 +156,7 @@ LIGHT_ARRAY_METHOD(collectGarbage) {
 LIGHT_ARRAY_METHOD(isUniform) {
 	zend_long value;
 
-	ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, 1, 1)
+	CHUNKUTILS2_PARSE_PARAMETER_START(1, 1)
 		Z_PARAM_LONG(value)
 	ZEND_PARSE_PARAMETERS_END();
 
@@ -169,7 +170,7 @@ LIGHT_ARRAY_METHOD(isUniform) {
 
 void register_light_array_class() {
 	memcpy(&light_array_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	light_array_handlers.offset = XtOffsetOf(light_array_obj, std);
+	light_array_handlers.offset = offsetof(light_array_obj, std);
 	light_array_handlers.free_obj = light_array_free;
 	light_array_handlers.clone_obj = light_array_clone;
 

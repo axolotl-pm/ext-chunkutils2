@@ -5,9 +5,17 @@ extern "C" {
 #include "php.h"
 }
 
+#if PHP_VERSION_ID >= 80600
+#define CHUNKUTILS2_PARSE_PARAMETER_START(min_num_args, max_num_args) ZEND_PARSE_PARAMETERS_START(min_num_args, max_num_args)
+#define chunkutils_parse_parameters_none() zend_parse_parameters_none()
+#else
+#define CHUNKUTILS2_PARSE_PARAMETER_START(min_num_args, max_num_args) ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, min_num_args, max_num_args)
+#define chunkutils_parse_parameters_none() zend_parse_parameters_none_throw()
+#endif
+
 template<typename class_name>
 static inline class_name * fetch_from_zend_object(zend_object *obj) {
-	return (class_name *)((char *)obj - XtOffsetOf(class_name, std));
+	return (class_name *)((char *)obj - offsetof(class_name, std));
 }
 
 template<typename class_name>
@@ -20,6 +28,14 @@ static class_name* alloc_custom_zend_object(zend_class_entry* ce, zend_object_ha
 	object->std.handlers = handlers;
 
 	return object;
+}
+
+static void chunkutils_zval_dtor(zval *val) {
+#if PHP_VERSION_ID >= 80600
+	zval_ptr_dtor_nogc(val);
+#else
+	zval_dtor(val);
+#endif
 }
 
 #endif
